@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Long Hair Identification — ML Gender Classifier</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+  <div class="app-wrapper">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <span class="logo-icon"><i class="fa-solid fa-brain"></i></span>
+        <span class="logo-text">HairID <span class="logo-badge">ML</span></span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-label">Tool</div>
+        <a href="#" class="nav-item active"><i class="fa-solid fa-magnifying-glass"></i> Analyse Image</a>
+        <a href="#how-it-works" class="nav-item"><i class="fa-solid fa-diagram-project"></i> How It Works</a>
+        <a href="#logic" class="nav-item"><i class="fa-solid fa-code-branch"></i> Decision Logic</a>
+      </nav>
+
+      <div class="sidebar-rule-box">
+        <div class="rule-title"><i class="fa-solid fa-circle-info"></i> Model Rules</div>
+        <ul class="rule-list">
+          <li><span class="tag tag-age">Age 20–30</span><br/>Classify by <strong>hair length</strong></li>
+          <li><span class="tag tag-out">Age &lt;20 or &gt;30</span><br/>Classify by <strong>actual gender</strong></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-footer">
+        <span>Long Hair Identification v1.0</span>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <header class="topbar">
+        <div class="topbar-title">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          Long Hair Gender Identification
+        </div>
+        <div class="topbar-sub">AI-powered · Claude Vision · Age-aware logic</div>
+      </header>
+
+      <!-- Upload Section -->
+      <section class="section-card">
+        <div class="section-header">
+          <i class="fa-solid fa-image"></i> Upload Image
+        </div>
+
+        <div class="drop-zone" id="dropZone">
+          <input type="file" accept="image/*" id="fileInput" class="file-input" />
+          <div class="drop-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+          <div class="drop-primary">Drop image here or click to browse</div>
+          <div class="drop-secondary">JPG · PNG · WEBP — face and hair must be clearly visible</div>
+        </div>
+
+        <div id="previewSection" class="preview-section hidden">
+          <div class="preview-wrap">
+            <img id="previewImg" class="preview-img" alt="Uploaded person" />
+            <button class="clear-btn" id="clearBtn" title="Remove image">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <button class="btn btn-primary full-width" id="analyseBtn">
+            <i class="fa-solid fa-sparkles"></i> Analyse Image
+          </button>
+        </div>
+
+        <div id="loadingSection" class="loading-section hidden">
+          <div class="loading-row">
+            <span class="spinner"><i class="fa-solid fa-spinner fa-spin"></i></span>
+            <span>Analysing with vision model…</span>
+          </div>
+          <div class="loading-steps">
+            <div class="step active" id="step1"><i class="fa-solid fa-eye"></i> Detecting features</div>
+            <div class="step" id="step2"><i class="fa-solid fa-ruler"></i> Measuring hair length</div>
+            <div class="step" id="step3"><i class="fa-solid fa-code-branch"></i> Applying decision logic</div>
+            <div class="step" id="step4"><i class="fa-solid fa-check"></i> Generating result</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Error -->
+      <div id="errorSection" class="error-box hidden"></div>
+
+      <!-- Result -->
+      <section id="resultSection" class="result-section hidden">
+
+        <div class="result-hero" id="resultHero">
+          <!-- Filled by JS -->
+        </div>
+
+        <div class="result-details-grid" id="resultGrid">
+          <!-- Filled by JS -->
+        </div>
+
+        <div class="confidence-section" id="confidenceSection">
+          <!-- Filled by JS -->
+        </div>
+
+        <div class="rule-reasoning" id="ruleReasoning">
+          <!-- Filled by JS -->
+        </div>
+
+        <button class="btn btn-outline full-width" id="tryAgainBtn">
+          <i class="fa-solid fa-rotate-left"></i> Analyse Another Image
+        </button>
+
+      </section>
+
+      <!-- How It Works -->
+      <section class="section-card" id="how-it-works">
+        <div class="section-header"><i class="fa-solid fa-diagram-project"></i> How It Works</div>
+        <div class="steps-flow">
+          <div class="flow-step">
+            <div class="flow-icon"><i class="fa-solid fa-image"></i></div>
+            <div class="flow-label">Upload photo</div>
+          </div>
+          <div class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="flow-step">
+            <div class="flow-icon"><i class="fa-solid fa-eye"></i></div>
+            <div class="flow-label">Vision model analyses face + hair</div>
+          </div>
+          <div class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="flow-step">
+            <div class="flow-icon"><i class="fa-solid fa-code-branch"></i></div>
+            <div class="flow-label">Age-aware decision logic</div>
+          </div>
+          <div class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          <div class="flow-step">
+            <div class="flow-icon"><i class="fa-solid fa-user-check"></i></div>
+            <div class="flow-label">Predicted gender output</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Decision Logic -->
+      <section class="section-card" id="logic">
+        <div class="section-header"><i class="fa-solid fa-code-branch"></i> Decision Logic Table</div>
+        <table class="logic-table">
+          <thead>
+            <tr>
+              <th>Age Range</th>
+              <th>Hair Length</th>
+              <th>Actual Gender</th>
+              <th>Predicted Gender</th>
+              <th>Rule</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag tag-age">20–30</span></td>
+              <td>Long</td>
+              <td>Male</td>
+              <td class="female-col"><strong>Female</strong></td>
+              <td>Hair-based</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-age">20–30</span></td>
+              <td>Long</td>
+              <td>Female</td>
+              <td class="female-col"><strong>Female</strong></td>
+              <td>Hair-based</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-age">20–30</span></td>
+              <td>Short</td>
+              <td>Female</td>
+              <td class="male-col"><strong>Male</strong></td>
+              <td>Hair-based</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-age">20–30</span></td>
+              <td>Short</td>
+              <td>Male</td>
+              <td class="male-col"><strong>Male</strong></td>
+              <td>Hair-based</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-out">&lt;20 or &gt;30</span></td>
+              <td>Any</td>
+              <td>Male</td>
+              <td class="male-col"><strong>Male</strong></td>
+              <td>Actual gender</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-out">&lt;20 or &gt;30</span></td>
+              <td>Any</td>
+              <td>Female</td>
+              <td class="female-col"><strong>Female</strong></td>
+              <td>Actual gender</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

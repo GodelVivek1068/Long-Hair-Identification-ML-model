@@ -271,7 +271,7 @@ def add_cors_headers(response: Response) -> Response:
 
 @app.get("/")
 def index() -> Response:
-    return send_from_directory(str(APP_ROOT), "index.html")
+    return jsonify(status="ok", service="long-hair-identification-backend", health="/health", analyse="/api/analyse")
 
 
 @app.get("/health")
@@ -424,3 +424,4 @@ def analyse() -> tuple[Response, int] | Response:
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=int(os.environ.get("PORT", "5000")), debug=True)
+

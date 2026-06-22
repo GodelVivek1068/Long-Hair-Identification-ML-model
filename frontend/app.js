@@ -39,7 +39,7 @@ let stepTimer       = null;
 
 const API_BASE_URL = window.location.protocol === 'file:'
   ? 'http://127.0.0.1:5000'
-  : window.location.origin;
+  : 'https://long-hair-identification-ml-model.onrender.com';
 
 // ── File Upload ──────────────────────────────────────────────
 fileInput.addEventListener('change', e => {
@@ -300,3 +300,4 @@ function capitalize(str) {
 function clamp(val, min, max) {
   return Math.min(max, Math.max(min, val));
 }
+
